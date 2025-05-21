@@ -38,32 +38,61 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Initialization ---
     function initialize() {
-        const today = new Date();
-        datePicker.value = today.toISOString().split('T')[0];
-        
-        // Set default interval button state (e.g., specific time)
-        setActiveIntervalButton(document.querySelector('.interval-btn[data-interval="0"]'));
+        // DOM Elements (既に定義されていると仮定)
+        // const datePicker = document.getElementById('date-picker');
+        // ... 他の要素 ...
 
-        reflectSettingsButton.addEventListener('click', loadAndProcessData);
-        intervalButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                currentDisplayInterval = parseInt(e.target.dataset.interval);
-                setActiveIntervalButton(e.target);
-                if (currentDisplayInterval !== 0) { // If interval selected, clear specific time
-                    timeInput.value = "";
-                }
-                loadAndProcessData(); // Or maybe just process if data is already loaded for the day
-            });
-        });
-        datePicker.addEventListener('change', loadAndProcessData);
-        timeInput.addEventListener('input', () => { // When user types in time, switch to specific time search
-            currentDisplayInterval = 0;
-            setActiveIntervalButton(document.querySelector('.interval-btn[data-interval="0"]'));
-        });
+        const today = new Date(); // 現在の日付
+        // データが存在する最も早い日付 (例: 2025-04-08)
+        const earliestDataDateString = "2025-04-08";
+        // JavaScriptのDateオブジェクトは月を0から数えるため、4月は3になります。
+        // new Date(年, 月(0-11), 日) の形式で指定します。
+        const earliestDataDate = new Date(2025, 3, 8); 
 
+        // ユーザーが指定したデータ表示の最終日 (2025-04-30)
+        const latestDataDateString = "2025-04-30";
+        const latestDataDate = new Date(2025, 3, 30);
 
-        loadAndProcessData(); // Initial load for today
-    }
+        let initialDateToLoad = today;
+
+        // もし今日の日付がlatestDataDateより後なら、initialDateToLoadをlatestDataDateにする
+        if (today > latestDataDate) {
+            initialDateToLoad = latestDataDate;
+        }
+        // もし今日の日付がearliestDataDateより前なら、initialDateToLoadをearliestDataDateにする
+        else if (today < earliestDataDate) {
+            initialDateToLoad = earliestDataDate;
+        }
+
+        // 日付ピッカーの値を設定
+        datePicker.value = initialDateToLoad.toISOString().split('T')[0];
+
+        // 日付ピッカーの選択範囲を設定
+        datePicker.min = earliestDataDateString;
+        datePicker.max = latestDataDateString;
+
+        // --- ここから下は既存の initialize 関数の残りの部分 ---
+        setActiveIntervalButton(document.querySelector('.interval-btn[data-interval="0"]'));
+
+        reflectSettingsButton.addEventListener('click', loadAndProcessData);
+        intervalButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                currentDisplayInterval = parseInt(e.target.dataset.interval);
+                setActiveIntervalButton(e.target);
+                if (currentDisplayInterval !== 0) { // If interval selected, clear specific time
+                    timeInput.value = "";
+                }
+                loadAndProcessData();
+            });
+        });
+        datePicker.addEventListener('change', loadAndProcessData);
+        timeInput.addEventListener('input', () => { // When user types in time, switch to specific time search
+            currentDisplayInterval = 0;
+            setActiveIntervalButton(document.querySelector('.interval-btn[data-interval="0"]'));
+        });
+
+        loadAndProcessData(); // Initial load for the determined initialDateToLoad
+    }
 
     function setActiveIntervalButton(activeButton) {
         intervalButtons.forEach(btn => btn.classList.remove('active'));
