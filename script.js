@@ -66,7 +66,7 @@ document
 
       /* hour + minute でマッチ */
       const hits = allRows.filter(
-        (r) => r.hour === hour && r.minute === minute && r.曜日 === weakday
+        (r) => r.hour === hour && r.minute === minute && r.["曜日"] === weekday
       );
 
       if (!hits.length) {
