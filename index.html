@@ -1,84 +1,53 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>バス待ち時間予報</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+  <meta charset="UTF-8">
+  <title>バス待ち時間 & 乗車時刻 推定アプリ</title>
+  <link rel="stylesheet" href="style.css"><!-- 任意 -->
+  <!-- Papa Parse CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>バス待ち時間予報</h1>
+  <h1>推定待ち時間 / 乗車時刻 サーチ</h1>
 
-        <div class="controls">
-            <h2>設定</h2>
-            <div class="control-group">
-                <label for="date-picker">日付選択:</label>
-                <input type="date" id="date-picker">
-            </div>
-
-            <div class="control-group">
-                <label>データ集計 (複数件ヒット時):</label>
-                <input type="radio" id="data-avg" name="aggregation" value="average" checked>
-                <label for="data-avg">平均値</label>
-                <input type="radio" id="data-recent" name="aggregation" value="recent">
-                <label for="data-recent">直近の値</label>
-            </div>
-
-            <div class="control-group">
-                <label>列解消モード:</label>
-                <input type="radio" id="mode-fit" name="mode" value="fit" checked>
-                <label for="mode-fit">Fit (変動)</label>
-                <input type="radio" id="mode-avg" name="mode" value="avg">
-                <label for="mode-avg">Avg (固定)</label>
-            </div>
-
-            <div class="control-group">
-                <input type="checkbox" id="use-prev-wait-time">
-                <label for="use-prev-wait-time">先行バスの状況で判断 (prev_deficit_m <= </label>
-                <input type="number" id="prev-deficit-m-threshold" value="5" min="0" style="width: 50px;">
-                <label for="prev-deficit-m-threshold">m なら prev_wait_min を表示)</label>
-            </div>
-
-            <div class="control-group">
-                <input type="checkbox" id="show-queue-length">
-                <label for="show-queue-length">バス列の長さ (seg_vals) を表示</label>
-            </div>
-
-            <div class="control-group">
-                <input type="checkbox" id="show-bus-details">
-                <label for="show-bus-details">乗車までのバス情報 (台数・種別) を表示</label>
-            </div>
-
-            <div class="control-group">
-                <label>表示間隔:</label>
-                <button class="interval-btn" data-interval="5">5分毎</button>
-                <button class="interval-btn" data-interval="10">10分毎</button>
-                <button class="interval-btn" data-interval="30">30分毎</button>
-                <button class="interval-btn" data-interval="60">1時間毎</button>
-                <button class="interval-btn" data-interval="0">指定時刻のみ</button> </div>
-             <div class="control-group">
-                <label for="time-input">特定時刻検索 (HH:MM:SS):</label>
-                <input type="time" id="time-input" name="time-input" step="1">
-            </div>
-
-            <button id="reflect-settings">設定を反映して再表示</button>
-        </div>
-
-        <div id="loading-indicator" style="display: none;">
-            <p>データを読み込み中...</p>
-        </div>
-
-        <div id="error-message" class="error" style="display: none;">
-            <p></p>
-        </div>
-
-        <h2>予測結果</h2>
-        <div id="results-container" class="results-scroll-container">
-            </div>
+  <form id="search-form">
+    <div class="control-group">
+      <label for="weekday">曜日:</label>
+      <select id="weekday" name="weekday" required>
+        <option value="月">月</option><option value="火">火</option>
+        <option value="水">水</option><option value="木">木</option>
+        <option value="金">金</option><option value="土">土</option>
+        <option value="日">日</option>
+      </select>
     </div>
 
-    <script src="script.js"></script>
+    <div class="control-group">
+      <label for="weather">天気:</label>
+      <input type="text" id="weather" name="weather" placeholder="例: 晴れ">
+    </div>
+
+    <div class="control-group">
+      <label for="hour">時 (0-23):</label>
+      <input type="number" id="hour"   name="hour"   min="0" max="23" required>
+    </div>
+
+    <div class="control-group">
+      <label for="minute">分 (0-59):</label>
+      <input type="number" id="minute" name="minute" min="0" max="59" required>
+    </div>
+
+    <button type="submit">検索</button>
+  </form>
+
+  <hr>
+
+  <section id="result">
+    <p>推定待ち時間: <span id="est-waiting-time">—</span> 分</p>
+    <p>推定乗車時刻: <span id="est-board-time">—</span></p>
+  </section>
+
+  <p id="status"></p>
+
+  <script defer src="script.js"></script>
 </body>
 </html>
