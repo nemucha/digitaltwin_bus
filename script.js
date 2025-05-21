@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const yyyymmdd = selectedDate.toISOString().split('T')[0];
         const dayOfWeekJST = getDayOfWeekJapanese(selectedDate);
         const selectedMode = modeFit.checked ? 'fit' : 'avg';
-        const csvFileName = `${yyyy-mm-dd}_${selectedMode === 'fit' ? 'com2' : 'com'}.csv`;
+        const csvFileName = `${yyyymmdd}_${selectedMode === 'fit' ? 'com2' : 'com'}.csv`;
         
         try {
             // 1. Fetch Weather Data (only for today/future, or always if preferred)
