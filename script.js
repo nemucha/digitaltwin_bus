@@ -192,12 +192,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else { // Specific time search (from timeInput)
             if (timeInput.value) {
-                const [hourStr, minuteStr] = timeInput.value.split(':');
+                const [hourStr, minuteStr, secondStr] = timeInput.value.split(':');
                 const searchHour = parseInt(hourStr);
                 const searchMinute = parseInt(minuteStr);
+                const searchSecond = parseInt(secondStr);
 
                 if (!isNaN(searchHour) && !isNaN(searchMinute)) {
-                     const searchTime = { hour: searchHour, minute: searchMinute, second: 0 };
+                     const searchTime = { hour: searchHour, minute: searchMinute, second: searchSecond};
                      const matchedRows = findMatchingRows(allCsvData, targetDayOfWeek, searchTime);
                      if (matchedRows.length > 0) {
                         const processedPoint = processSingleTimePoint(matchedRows, aggregationMethod);
