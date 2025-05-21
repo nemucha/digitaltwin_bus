@@ -93,7 +93,7 @@ document
 
       /* 画面反映 */
       document.getElementById("est-waiting-time").textContent = diff;
-      document.getElementById("est-board-time").textContent = estBoardTime;
+      document.getElementById("est-board-time").textContent = boardTimes;
       status.textContent = `一致した行数: ${hits.length}`;
     } catch (err) {
       console.error(err);
