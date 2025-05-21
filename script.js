@@ -48,6 +48,7 @@ document
     /* 入力取得 */
     const hour = parseInt(document.getElementById("hour").value, 10);
     const minute = parseInt(document.getElementById("minute").value, 10);
+    const weekday = parseInt(document.getElementById("weekday").value, 10);
 
     /* ★ submitted_at を HH:MM 文字列で保持 */
     const submitted_at = `${String(hour).padStart(2, "0")}:${String(minute).padStart(
@@ -65,7 +66,7 @@ document
 
       /* hour + minute でマッチ */
       const hits = allRows.filter(
-        (r) => r.hour === hour && r.minute === minute
+        (r) => r.hour === hour && r.minute === minute && r.曜日 === weakday
       );
 
       if (!hits.length) {
