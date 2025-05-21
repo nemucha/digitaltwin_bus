@@ -1,7 +1,7 @@
 /* ---------------------------------------------
  * 設定
  * -------------------------------------------*/
-const CSV_FILES = Array.from({ length: 23 }, (_, i) =>
+const CSV_FILES = Array.from({ length: 13 }, (_, i) =>
   `data/2025-04-${String(i + 8).padStart(2, "0")}_com.csv`
 );
 
